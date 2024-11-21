@@ -26,7 +26,7 @@ async def scrape_amazon(sku: str) -> dict:
         dict: A dictionary containing a boolean indicating success and a message.
     """
     headers = {
-        'User-Agent': str(user_agent)
+        'User-Agent': user_agent()
     }
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True, slow_mo=500)

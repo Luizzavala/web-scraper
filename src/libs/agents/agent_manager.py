@@ -1,7 +1,6 @@
 import random
 from src.libs.agents.constant import BROWSER_AGENTS
 
-@property
 def user_agent() -> str:
     """
     A property that returns a randomly selected User-Agent string
