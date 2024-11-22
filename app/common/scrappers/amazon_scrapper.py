@@ -10,12 +10,13 @@ from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
 
 # local
-from src.libs.amazon.constant import AMAZON_URL
-from src.libs.agents.agent_manager import user_agent
-from src.domain.models.recipe_item import recipeItem
+from libs.constant import AMAZON_URL
+from libs.agent_manager import user_agent
+from common.models.recipe_item import recipeItem
 
 
-async def scrape_amazon(sku: str) -> dict:
+async def amazon_scrapper(sku: str) -> dict:
+    raise Exception("Not implemented")
     """
     Scrapes an Amazon product page for a given SKU.
 
@@ -64,17 +65,14 @@ async def _extract_articles(soup: BeautifulSoup) -> List[recipeItem]:
     article_containers = soup.find_all(attrs={"data-component-type": "s-search-result"})
 
     for container in article_containers:
-        # Extract title
         title_recipe = container.find(attrs={"data-cy": "title-recipe"})
         title_span = title_recipe.find("span")
         title = title_span.text.strip() if title_span else "Título no disponible"
 
-        # Skip sponsored results
         if title == "SponsoredSponsored":
             continue
 
-        # Extract URL
-        link_tag = title_recipe.find("a")
+        link_tag = title_recipe.find("a") if title_recipe else None
         base_url = AMAZON_URL.split("/s?k=")[0]
         url = (
             f"{base_url}{link_tag.get('href')}"
@@ -82,18 +80,16 @@ async def _extract_articles(soup: BeautifulSoup) -> List[recipeItem]:
             else "URL no disponible"
         )
 
-        # Extract price
         price_recipe = container.find(attrs={"data-cy": "price-recipe"})
         price_tag = (
             price_recipe.find(attrs={"class": "a-offscreen"})
         )
         price = price_tag.text.strip() if price_tag else "Precio no disponible"
 
-        # Create amazonItem object
         articles.append(recipeItem(title=title, url=url, price=price))
     return articles
 
-
+@staticmethod
 async def save_results(
         content: Optional[str] = None,
         objects_list: Optional[List[recipeItem]] = None,
@@ -111,17 +107,19 @@ async def save_results(
         None
     """
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    os.makedirs("results", exist_ok=True)
+    os.makedirs("outputs", exist_ok=True)
 
-    # Save HTML content
-    if content is not None:
-        html_path = os.path.join("results", f"Amazon-{sku}-{timestamp}.html")
+    if content:
+        html_dir = os.path.join("outputs", "html")
+        os.makedirs(html_dir, exist_ok=True)
+        html_path = os.path.join(html_dir, f"scrapper-{sku}-{timestamp}.html")
         async with aio_open(html_path, "w") as f:
             await f.write(content)
 
-    # Save JSON objects
-    if objects_list is not None:
-        json_path = os.path.join("results", f"Amazon-{sku}-{timestamp}.json")
+    if objects_list:
+        json_dir = os.path.join("outputs", "json")
+        os.makedirs(json_dir, exist_ok=True)
+        json_path = os.path.join(json_dir, f"scrapper-{sku}-{timestamp}.json")
         async with aio_open(json_path, "w") as f:
             serialized_data = json.dumps(
                 [obj.__dict__ for obj in objects_list], indent=4
