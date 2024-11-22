@@ -1,5 +1,5 @@
 import random
-from libs.constant import BROWSER_AGENTS
+from app.libs.constant import BROWSER_AGENTS
 
 def user_agent() -> str:
     """

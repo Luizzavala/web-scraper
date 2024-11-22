@@ -1,6 +1,6 @@
 import asyncio
-from config.logger import logger_manager, logging
-from common.scrappers.amazon_scrapper import amazon_scrapper
+from app.config import (logger_manager, logging)
+from app.common import amazon_scrapper
 
 
 @logger_manager(name="main", log_level=logging.INFO, max_bytes=2_000_000)

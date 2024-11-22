@@ -10,13 +10,12 @@ from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
 
 # local
-from libs.constant import AMAZON_URL
-from libs.agent_manager import user_agent
-from common.models.recipe_item import recipeItem
+from app.libs import AMAZON_URL
+from app.libs import user_agent
+from app.common import recipeItem
 
 
 async def amazon_scrapper(sku: str) -> dict:
-    raise Exception("Not implemented")
     """
     Scrapes an Amazon product page for a given SKU.
 
@@ -89,7 +88,6 @@ async def _extract_articles(soup: BeautifulSoup) -> List[recipeItem]:
         articles.append(recipeItem(title=title, url=url, price=price))
     return articles
 
-@staticmethod
 async def save_results(
         content: Optional[str] = None,
         objects_list: Optional[List[recipeItem]] = None,
