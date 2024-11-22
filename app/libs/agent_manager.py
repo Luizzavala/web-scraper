@@ -1,5 +1,5 @@
 import random
-from src.libs.agents.constant import BROWSER_AGENTS
+from libs.constant import BROWSER_AGENTS
 
 def user_agent() -> str:
     """
@@ -9,4 +9,4 @@ def user_agent() -> str:
     Returns:
         str: A randomly selected User-Agent string.
     """
-    return random.choice(BROWSER_AGENTS)
+    return str(random.choice(BROWSER_AGENTS))

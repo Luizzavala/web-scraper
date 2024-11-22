@@ -5,8 +5,4 @@ class recipeItem:
         self.price: float = price
 
     def toDict(self):
-        return {
-            'title': self.title,
-            'url': self.url,
-            'price': self.price
-        }
+        return {"title": self.title, "url": self.url, "price": self.price}
