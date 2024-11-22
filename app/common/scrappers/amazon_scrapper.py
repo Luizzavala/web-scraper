@@ -16,6 +16,7 @@ from common.models.recipe_item import recipeItem
 
 
 async def amazon_scrapper(sku: str) -> dict:
+    raise Exception("Not implemented")
     """
     Scrapes an Amazon product page for a given SKU.
 

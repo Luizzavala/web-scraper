@@ -1,21 +1,16 @@
-<p align="center">
-  <a href="" rel="noopener">
- <img width=600px height=200px src="https://flask.palletsprojects.com/en/3.0.x/_images/flask-horizontal.png" alt="Project logo"></a>
-</p>
-
-<h1 align="center">Flask Core API</h1>
+<h1 align="center">Scrapping Web Amazon</h1>
 ``
 <div align="center">
 
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
-[![GitHub Commits](https://img.shields.io/github/commit-activity/t/JHectorZ/flask-core)](https://github.com/JHectorZ/flask-core/commits)
+[![GitHub Commits](https://img.shields.io/github/commit-activity/t/Luizzavala/web-scraper)](https://github.com/Luizzavala/web-scraper/commits)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
 </div>
 
 ---
 
-<p align="center"> Core Module for Clean Architecture Code in Project Flask, API REST.
+<p align="center"> WEB SCRAPPING AMAZON
     <br> 
 </p>
 
@@ -28,11 +23,11 @@
 
 ## About <a name = "about"></a>
 
-The system using the Python programming language in conjunction with the Flask framework, rigorously adhering to Clean Code principles. Our infrastructure is highly scalable and backed by a MySQL database, ensuring exceptional performance and efficiency.
+Web Scrapper for Amazon using Python and Playwright library. This repository contains a web scrapper for Amazon, that allows you to extract information of products like the name, price and url from amazon.
 
 ## Getting Started
 
-Welcome to the Flask Core! This guide will help you get started with setting up your development environment and running the application.
+Welcome to the Web Scrapper for Amazon! This guide will help you set up your development environment and run the web scrapping application.
 
 ### Prerequisites
 
@@ -48,11 +43,11 @@ Follow these steps to set up your development environment:
 ##### Clone the Repository
 
 ```
-git clone https://github.com/JHectorZ/flask-core.git
+git clone https://github.com/Luizzavala/web-scraper
 ```
 ##### and repeat
 ```
-cd flask-core
+cd web-scraper
 ```
 
 ### Remember  
@@ -66,17 +61,16 @@ pip install -r requirements.txt
 
 ## Contains <a name = "contains"></a>
 
-- **Swagger:** *pending*.
-- **JWT:** complete.
-- **CORS:** complete.
-- **MySQL:**  complete.
+- **CLI:** *pending*.
 - **loggings:**  complete.
-- **ENV:**  complete.
-- **Hash Password:** complete.
 
 
 ## Authors <a name = "authors"></a>
 
-- [@JHectorZ](https://github.com/JHectorZ) - Idea & Initial work
+{% for contributor in contributors %}
+- [@{{ contributor.username }}](https://github.com/{{ contributor.username }}) - {{ contributor.contribution }}
 
-See also the list of [contributors](https://github.com/JHectorZ/flask-core/contributors) who participated in this project.
+{% endfor %}
+
+See also the list of [contributors](https://github.com/Luizzavala/web-scraper/contributors) who participated in this project.
+
