@@ -38,16 +38,18 @@ async def scrape_amazon(sku: str) -> dict:
             content = await page.content()
             soup = BeautifulSoup(content, "html.parser")
 
-            articles = _extract_articles(soup)
+            articles = await _extract_articles(soup)
 
-            await save_results(content=content, objects_list=articles, sku=sku)
+            await save_results(content=None, objects_list=articles, sku=sku)
+
+            return {"success": True, "message": "Articulos encontrados"}
         except Exception as e:
             return {"success": False, "message": str(e)}
         finally:
             await browser.close()
 
 
-def _extract_articles(soup: BeautifulSoup) -> List[recipeItem]:
+async def _extract_articles(soup: BeautifulSoup) -> List[recipeItem]:
     """
     Extracts articles from the BeautifulSoup object.
 
@@ -64,7 +66,7 @@ def _extract_articles(soup: BeautifulSoup) -> List[recipeItem]:
     for container in article_containers:
         # Extract title
         title_recipe = container.find(attrs={"data-cy": "title-recipe"})
-        title_span = title_recipe.find("span") if title_recipe else None
+        title_span = title_recipe.find("span")
         title = title_span.text.strip() if title_span else "Título no disponible"
 
         # Skip sponsored results
@@ -72,7 +74,7 @@ def _extract_articles(soup: BeautifulSoup) -> List[recipeItem]:
             continue
 
         # Extract URL
-        link_tag = title_recipe.find("a") if title_recipe else None
+        link_tag = title_recipe.find("a")
         base_url = AMAZON_URL.split("/s?k=")[0]
         url = (
             f"{base_url}{link_tag.get('href')}"
@@ -83,13 +85,12 @@ def _extract_articles(soup: BeautifulSoup) -> List[recipeItem]:
         # Extract price
         price_recipe = container.find(attrs={"data-cy": "price-recipe"})
         price_tag = (
-            price_recipe.find(attrs={"class": "a-offscreen"}) if price_recipe else None
+            price_recipe.find(attrs={"class": "a-offscreen"})
         )
         price = price_tag.text.strip() if price_tag else "Precio no disponible"
 
         # Create amazonItem object
         articles.append(recipeItem(title=title, url=url, price=price))
-
     return articles
 
 
@@ -113,13 +114,13 @@ async def save_results(
     os.makedirs("results", exist_ok=True)
 
     # Save HTML content
-    if content:
+    if content is not None:
         html_path = os.path.join("results", f"Amazon-{sku}-{timestamp}.html")
         async with aio_open(html_path, "w") as f:
             await f.write(content)
 
     # Save JSON objects
-    if objects_list:
+    if objects_list is not None:
         json_path = os.path.join("results", f"Amazon-{sku}-{timestamp}.json")
         async with aio_open(json_path, "w") as f:
             serialized_data = json.dumps(
