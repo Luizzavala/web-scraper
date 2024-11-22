@@ -39,16 +39,18 @@ async def amazon_scrapper(sku: str) -> dict:
             content = await page.content()
             soup = BeautifulSoup(content, "html.parser")
 
-            articles = _extract_articles(soup)
+            articles = await _extract_articles(soup)
 
-            await save_results(content=content, objects_list=articles, sku=sku)
+            await save_results(content=None, objects_list=articles, sku=sku)
+
+            return {"success": True, "message": "Articulos encontrados"}
         except Exception as e:
             return {"success": False, "message": str(e)}
         finally:
             await browser.close()
 
-@staticmethod
-def _extract_articles(soup: BeautifulSoup) -> List[recipeItem]:
+
+async def _extract_articles(soup: BeautifulSoup) -> List[recipeItem]:
     """
     Extracts articles from the BeautifulSoup object.
 
@@ -64,7 +66,7 @@ def _extract_articles(soup: BeautifulSoup) -> List[recipeItem]:
 
     for container in article_containers:
         title_recipe = container.find(attrs={"data-cy": "title-recipe"})
-        title_span = title_recipe.find("span") if title_recipe else None
+        title_span = title_recipe.find("span")
         title = title_span.text.strip() if title_span else "Título no disponible"
 
         if title == "SponsoredSponsored":
@@ -80,12 +82,11 @@ def _extract_articles(soup: BeautifulSoup) -> List[recipeItem]:
 
         price_recipe = container.find(attrs={"data-cy": "price-recipe"})
         price_tag = (
-            price_recipe.find(attrs={"class": "a-offscreen"}) if price_recipe else None
+            price_recipe.find(attrs={"class": "a-offscreen"})
         )
         price = price_tag.text.strip() if price_tag else "Precio no disponible"
 
         articles.append(recipeItem(title=title, url=url, price=price))
-
     return articles
 
 @staticmethod
