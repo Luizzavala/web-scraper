@@ -8,6 +8,6 @@ from .constant import (
 __all__ = [
     "user_agent",
     "AMAZON_URL",
-    "BROWSER_AGENTS"
+    "BROWSER_AGENTS",
     "BANNER_MENU"
 ]
