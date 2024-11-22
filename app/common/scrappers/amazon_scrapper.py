@@ -10,8 +10,7 @@ from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
 
 # local
-from app.libs import AMAZON_URL
-from app.libs import user_agent
+from ...libs import (AMAZON_URL, user_agent)
 from app.common import recipeItem
 
 
