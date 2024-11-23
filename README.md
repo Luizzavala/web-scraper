@@ -1,5 +1,5 @@
-<h1 align="center">Scrapping Web Amazon</h1>
-``
+<h1 align="center">Web Scraper for Amazon</h1>
+
 <div align="center">
 
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
@@ -10,7 +10,7 @@
 
 ---
 
-<p align="center"> WEB SCRAPPING AMAZON
+<p align="center">A Python-based web scraper for Amazon, using the Playwright library.
     <br> 
 </p>
 
@@ -18,16 +18,16 @@
 
 - [About](#about)
 - [Getting Started](#getting_started)
-- [Contains](#contains)
+- [Features](#features)
 - [Authors](#authors)
 
-## About <a name = "about"></a>
+## About <a name="about"></a>
 
-Web Scrapper for Amazon using Python and Playwright library. This repository contains a web scrapper for Amazon, that allows you to extract information of products like the name, price and url from amazon.
+This repository contains a web scraper for Amazon that allows you to extract product information, such as name, price, and URL, directly from the website. It is built using Python and the Playwright library.
 
-## Getting Started
+## Getting Started <a name="getting_started"></a>
 
-Welcome to the Web Scrapper for Amazon! This guide will help you set up your development environment and run the web scrapping application.
+Welcome to the Web Scraper for Amazon! This guide will help you set up your development environment and run the web scraping application.
 
 ### Prerequisites
 
@@ -40,37 +40,34 @@ Before you begin, ensure you have the following installed on your system:
 
 Follow these steps to set up your development environment:
 
-##### Clone the Repository
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/Luizzavala/web-scraper
+    ```
+2. Navigate to the project directory:
+    ```bash
+    cd web-scraper
+    ```
+3. Add an **.env** file to your `.gitignore` to manage sensitive data securely.
 
-```
-git clone https://github.com/Luizzavala/web-scraper
-```
-##### and repeat
-```
-cd web-scraper
-```
+4. Install the required Python packages:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-### Remember  
-add **env** file to .gitignore
+## Features <a name="features"></a>
 
+- **CLI:** *Pending implementation*.
+- **Logging:** Fully implemented for tracking scraper activities.
 
-### and install requirements
-```
-pip install -r requirements.txt
-```
+## Authors <a name="authors"></a>
 
-## Contains <a name = "contains"></a>
+This project is maintained and developed by the following contributors:
 
-- **CLI:** *pending*.
-- **loggings:**  complete.
+- [@Luizzavala](https://github.com/Luizzavala) - Initial development and project maintenance.
 
+See the list of [contributors](https://github.com/Luizzavala/web-scraper/contributors) who participated in this project.
 
-## Authors <a name = "authors"></a>
+---
 
-{% for contributor in contributors %}
-- [@{{ contributor.username }}](https://github.com/{{ contributor.username }}) - {{ contributor.contribution }}
-
-{% endfor %}
-
-See also the list of [contributors](https://github.com/Luizzavala/web-scraper/contributors) who participated in this project.
-
+Feel free to open issues or submit pull requests for any improvements or feature suggestions!
