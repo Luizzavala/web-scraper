@@ -65,6 +65,7 @@ Follow these steps to set up your development environment:
 This project is maintained and developed by the following contributors:
 
 - [@Luizzavala](https://github.com/Luizzavala) - Initial development and project maintenance.
+- [@DeviantRacoon](https://github.com/DeviantRacoon) - Contributing to the project.
 
 See the list of [contributors](https://github.com/Luizzavala/web-scraper/contributors) who participated in this project.
 
