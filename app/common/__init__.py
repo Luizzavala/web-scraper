@@ -1,7 +1,13 @@
-#Models
-from app.common.models import recipeItem
+# Models
+from .models import recipeItem
 
-#Scrappers
-from app.common.scrappers import amazon_scrapper
+# Scrappers
+from .scrappers import amazon_scrapper
+from .scrappers import mercadolibre_scrapper
 
-__all__ = ["recipeItem", "amazon_scrapper"]
+scrapper_map = {
+    "Amazon": amazon_scrapper,
+    "MercadoLibre": mercadolibre_scrapper
+}
+
+__all__ = ["recipeItem", "amazon_scrapper", "mercadolibre_scrapper", "scrapper_map"]
