@@ -1,4 +1,4 @@
-<h1 align="center">Web Scraper for Amazon</h1>
+<h1 align="center">Web Scraper</h1>
 
 <div align="center">
 
