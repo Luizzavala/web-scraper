@@ -57,8 +57,13 @@ Follow these steps to set up your development environment:
 
 ## Features <a name="features"></a>
 
-- **CLI:** *Pending implementation*.
-- **Logging:** Fully implemented for tracking scraper activities.
+| Característica | Estado | Detalles |
+|---|---|---|
+| CLI | ✅ Completado | Interfaz de línea de comandos para una fácil interacción |
+| Logging | ✅ Completado | Sistema de registro detallado para seguimiento y depuración |
+| Scrapers |  |  |
+|   - Amazon | ✅ Completado | Extrae información de productos, precios, disponibilidad y reseñas |
+|   - MercadoLibre | ✅ Completado | Extrae información de productos de MercadoLibre |
 
 ## Authors <a name="authors"></a>
 
