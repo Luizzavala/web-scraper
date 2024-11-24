@@ -1,45 +1,58 @@
 # stdlib
-import os
-from datetime import datetime
-from typing import List, Optional
+from typing import List
 
 # external
-import json
-from aiofiles import open as aio_open
 from bs4 import BeautifulSoup
 from playwright.async_api import async_playwright
+from urllib.parse import urljoin
 
 # local
-from ...libs import (AMAZON_URL, user_agent)
+from ...libs import (AMAZON_URL, user_agent, save_results)
 from app.common import recipeItem
 
 
 async def amazon_scrapper(sku: str) -> dict:
     """
     Scrapes an Amazon product page for a given SKU.
-
     Args:
         sku (str): The product SKU to scrape.
-
     Returns:
         dict: A dictionary containing a boolean indicating success and a message.
     """
     headers = {
         'User-Agent': user_agent()
     }
+    search_url = f"{AMAZON_URL}{sku}"
+    all_products = []
+
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True, slow_mo=500)
         try:
+
             page = await browser.new_page(extra_http_headers=headers)
-            await page.goto(f"{AMAZON_URL}{sku}")
-            await page.wait_for_load_state("load")
 
-            content = await page.content()
-            soup = BeautifulSoup(content, "html.parser")
+            while search_url:
+                await page.goto(search_url)
+                await page.wait_for_load_state("load")
 
-            articles = await _extract_articles(soup)
+                content = await page.content()
+                soup = BeautifulSoup(content, "html.parser")
 
-            await save_results(content=None, objects_list=articles, sku=sku)
+                # Extraer los artículos de la página actual
+                products = await _extract_articles(soup)
+                all_products.extend(products)
+
+                # Buscar el enlace de la siguiente página
+                next_page = soup.select_one("a.s-pagination-next")
+                if next_page and "href" in next_page.attrs:
+                    search_url = urljoin(AMAZON_URL, next_page["href"])
+                else:
+                    search_url = None
+
+            await save_results(
+                objects_list=all_products,
+                sku=sku
+            )
 
             return {"success": True, "message": "Articulos encontrados"}
         except Exception as e:
@@ -51,74 +64,28 @@ async def amazon_scrapper(sku: str) -> dict:
 async def _extract_articles(soup: BeautifulSoup) -> List[recipeItem]:
     """
     Extracts articles from the BeautifulSoup object.
-
     Args:
         soup (BeautifulSoup): The parsed HTML content.
-
     Returns:
         List[amazonItem]: A list of extracted articles.
     """
+    product_containers = soup.find_all("div", attrs={"data-component-type": "s-search-result"})
+    products = []
 
-    articles = []
-    article_containers = soup.find_all(attrs={"data-component-type": "s-search-result"})
+    for container in product_containers:
+        # Extraer el título
+        title_tag = container.select_one("h2 a span")
+        title = title_tag.text.strip() if title_tag else "Título no disponible"
 
-    for container in article_containers:
-        title_recipe = container.find(attrs={"data-cy": "title-recipe"})
-        title_span = title_recipe.find("span")
-        title = title_span.text.strip() if title_span else "Título no disponible"
-
-        if title == "SponsoredSponsored":
-            continue
-
-        link_tag = title_recipe.find("a") if title_recipe else None
+        # Extraer la URL
+        link_tag = container.select_one("h2 a")
         base_url = AMAZON_URL.split("/s?k=")[0]
-        url = (
-            f"{base_url}{link_tag.get('href')}"
-            if link_tag and link_tag.get("href")
-            else "URL no disponible"
-        )
+        url = urljoin(base_url, link_tag["href"]) if link_tag and link_tag.get("href") else "URL no disponible"
 
-        price_recipe = container.find(attrs={"data-cy": "price-recipe"})
-        price_tag = (
-            price_recipe.find(attrs={"class": "a-offscreen"})
-        )
+        # Extraer el precio
+        price_tag = container.select_one(".a-price .a-offscreen")
         price = price_tag.text.strip() if price_tag else "Precio no disponible"
 
-        articles.append(recipeItem(title=title, url=url, price=price))
-    return articles
+        products.append(recipeItem(title=title, url=url, price=price))
 
-async def save_results(
-        content: Optional[str] = None,
-        objects_list: Optional[List[recipeItem]] = None,
-        sku: str = "result",
-) -> None:
-    """
-    Saves the results as HTML or JSON files in the 'results' folder.
-
-    Args:
-        content (Optional[str]): The HTML content to save.
-        objects_list (Optional[List[amazonItem]]): A list of objects to save as JSON.
-        sku (str): The SKU or identifier for the files.
-
-    Returns:
-        None
-    """
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    os.makedirs("outputs", exist_ok=True)
-
-    if content:
-        html_dir = os.path.join("outputs", "html")
-        os.makedirs(html_dir, exist_ok=True)
-        html_path = os.path.join(html_dir, f"scrapper-{sku}-{timestamp}.html")
-        async with aio_open(html_path, "w") as f:
-            await f.write(content)
-
-    if objects_list:
-        json_dir = os.path.join("outputs", "json")
-        os.makedirs(json_dir, exist_ok=True)
-        json_path = os.path.join(json_dir, f"scrapper-{sku}-{timestamp}.json")
-        async with aio_open(json_path, "w") as f:
-            serialized_data = json.dumps(
-                [obj.__dict__ for obj in objects_list], indent=4
-            )
-            await f.write(serialized_data)
+    return products
