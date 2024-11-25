@@ -57,13 +57,13 @@ Follow these steps to set up your development environment:
 
 ## Features <a name="features"></a>
 
-| Característica | Estado | Detalles |
+| Feature | Status | Details |
 |---|---|---|
-| CLI | ✅ Completado | Interfaz de línea de comandos para una fácil interacción |
-| Logging | ✅ Completado | Sistema de registro detallado para seguimiento y depuración |
+| CLI | ✅ Completed | Command-line interface for easy interaction |
+| Logging | ✅ Completed | Detailed logging system for tracking and debugging |
 | Scrapers |  |  |
-|   - Amazon | ✅ Completado | Extrae información de productos, precios, disponibilidad y reseñas |
-|   - MercadoLibre | ✅ Completado | Extrae información de productos de MercadoLibre |
+|   - Amazon | ✅ Completed | Extracts product information, prices, availability, and reviews |
+|   - MercadoLibre | ✅ Completed | Extracts product information from MercadoLibre |
 
 ## Authors <a name="authors"></a>
 
